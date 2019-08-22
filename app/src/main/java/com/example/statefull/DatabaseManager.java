@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseManager extends SQLiteOpenHelper {
 
@@ -20,6 +21,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String COLUMN_USERID = "Userid";
     private static final String COLUMN_TIME="time";
     private static final String COLUMN_VALUE="mood";
+
+    private static final String TABLE_NAME3 = "Variables";
+    private static final String COLUMN_LOGGED = "logged";
+    private static final String COLUMN_LOG_TIME = "log_time";
+    private static final String COLUMN_LAST_LOG = "last_log";
 
     static DatabaseManager databaseManager = null;
 
@@ -42,8 +48,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 " " + COLUMN_TIME   + "DATE,"   +
                 " " + COLUMN_VALUE  + "INTEGER);";
 
+        String sql2 = "CREATE TABLE " + TABLE_NAME3 + "(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                " " + COLUMN_LOGGED + " Boolean," +
+                " " + COLUMN_LOG_TIME + " DATE," +
+                " " + COLUMN_LAST_LOG + " DATE);";
+
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.execSQL(sql1);
+        sqLiteDatabase.execSQL(sql2);
 
     }
 
@@ -52,6 +64,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
         String sql = "DROP TABLE IF EXISTS " + TABLE_NAME1 + ";";
         sqLiteDatabase.execSQL(sql);
         sql = "DROP TABLE IF EXISTS "+TABLE_NAME2+";";
+        sqLiteDatabase.execSQL(sql);
+        sql = "DROP TABLE IF EXISTS " + TABLE_NAME3 + ";";
         sqLiteDatabase.execSQL(sql);
         onCreate(sqLiteDatabase);
     }
@@ -80,17 +94,50 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
         return false;
     }
+
+    void loginSuccess() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_ID, 1);
+        contentValues.put(COLUMN_LOGGED, true);
+        Cursor cursor = this.getWritableDatabase().rawQuery("Select * from " + TABLE_NAME3, null);
+        if (cursor.getCount() == 1) {
+            this.getWritableDatabase().update(TABLE_NAME3, contentValues, COLUMN_ID + "=?", new String[]{"1"});
+            Log.d("Updated", "loginSuccess");
+        } else if (cursor.getCount() == 0) {
+            this.getWritableDatabase().insert(TABLE_NAME3, null, contentValues);
+            Log.d("Inserted ", "loginSuccess");
+        }
+        cursor.close();
+    }
+
+    boolean logged() {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + TABLE_NAME3, null);
+        if (cursor.moveToFirst()) {
+            String x = cursor.getString(cursor.getColumnIndex(COLUMN_LOGGED));
+            Log.d("Log value: ", x + "00");
+            cursor.close();
+            if (x.equals("1")) {
+                Log.d("returning ", "true");
+                return true;
+            } else {
+                Log.d("returning", "false");
+                return false;
+            }
+
+        } else {
+            Log.d("returning ", "out else");
+            return false;
+        }
+    }
     boolean isUser(String name,String pass) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor =  db.rawQuery("SELECT * FROM " + TABLE_NAME1, null);
-
-
         if(cursor.moveToFirst()){
             do{
 
-                String user_ = cursor.getString(1);
+                String mail_ = cursor.getString(3);
                 String pass_ = cursor.getString(2);
-                if (user_.equals(name) && pass_.equals(pass)) {
+                if (mail_.equals(name) && pass_.equals(pass)) {
                     cursor.close();
                     return true;
                 }

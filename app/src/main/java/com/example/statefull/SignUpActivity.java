@@ -12,6 +12,7 @@ import android.widget.TextView;
 public class SignUpActivity extends AppCompatActivity {
 
 
+
     public static final String ALREADY_EXIST = "Username already exist";
     public static final String VALID_USERNAME = "Enter valid username";
 
@@ -20,6 +21,8 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         DatabaseManager.databaseManager = new DatabaseManager(this);
+        new DatabaseManager(this);
+
     }
 
     boolean userCheck(String user) {
@@ -39,9 +42,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     boolean keyCheck(String key, String reKey) {
-        if (key.equals(reKey) && key.length() >= 5 && !key.contains(" ")) {
-
-
+        if (key.equals(reKey) && key.length() >= 5) {
+            return !key.contains(" ");
         }
         return false;
 
@@ -112,6 +114,5 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         }
-
     }
 }
