@@ -123,7 +123,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 Log.d("returning", "false");
                 return false;
             }
-
         } else {
             Log.d("returning ", "out else");
             return false;

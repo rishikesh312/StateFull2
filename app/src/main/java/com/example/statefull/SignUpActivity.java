@@ -2,16 +2,15 @@ package com.example.statefull;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 public class SignUpActivity extends AppCompatActivity {
-
-
 
     public static final String ALREADY_EXIST = "Username already exist";
     public static final String VALID_USERNAME = "Enter valid username";
@@ -82,7 +81,6 @@ public class SignUpActivity extends AppCompatActivity {
             setResult(RESULT_OK, intent);
             finish();
         } else {
-
             if (!ucheck) {
                 if (username.length() > 0) {
                     TextView erruser = findViewById(R.id.error_username);
