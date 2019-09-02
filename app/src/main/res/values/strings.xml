@@ -2,4 +2,5 @@
     <string name="app_name">StateFull</string>
     <string name="open_drawer">Open Navigation Drawer</string>
     <string name="close_drawer">Close Navigation Drawer</string>
+    <string name="about">We help you to log your mental and emotional states and provide insigt of your log. We use the state of the art machine learning techniques to detect mental problems and also try to predict the mood changes in days. You can also help us by sending those data to us and we can use that for research in psychology studies.</string>
 </resources>

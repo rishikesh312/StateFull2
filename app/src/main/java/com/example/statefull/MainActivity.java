@@ -25,11 +25,14 @@ public class MainActivity extends AppCompatActivity {
 
         String mailString = mail.getText().toString();
         String passString = pass.getText().toString();
-
-        if (DatabaseManager.databaseManager.isUser(mailString, passString)) {
+        int result = DatabaseManager.databaseManager.isUser(mailString, passString);
+        if (result != -1) {
             Intent intent = new Intent(this, MindActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+            DatabaseManager.databaseManager.loginSuccess(result);
             startActivity(intent);
-            DatabaseManager.databaseManager.loginSuccess();
+            this.finish();
         }
 
     }

@@ -35,5 +35,6 @@ public class SplashActivity extends AppCompatActivity {
 
     public boolean isitLogged() {
         return DatabaseManager.databaseManager.logged();
+
     }
 }

@@ -1,9 +1,13 @@
 package com.example.statefull;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -13,8 +17,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
 
-public class MindActivity extends AppCompatActivity {
-
+public class MindActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    DrawerLayout drawer;
+    NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,12 +27,18 @@ public class MindActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.open_drawer, R.string.close_drawer);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StateFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_states);
+        }
     }
 
     @Override
@@ -57,7 +68,42 @@ public class MindActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
+        if (id == R.id.action_signout) {
+            DatabaseManager.databaseManager.logout();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            this.finish();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Log.d("Called", "ONNavigationItemSelected" + menuItem.getItemId());
+        switch (menuItem.getItemId()) {
+            case R.id.nav_states:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StateFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_states);
+                break;
+            case R.id.nav_levels:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new LevelsFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_levels);
+                break;
+            case R.id.nav_reminders:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReminderFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_reminders);
+                break;
+            case R.id.nav_about:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_about);
+                break;
+            case R.id.nav_send:
+                Toast.makeText(this, "Sending", Toast.LENGTH_SHORT);
+                break;
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
