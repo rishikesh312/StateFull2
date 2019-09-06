@@ -6,4 +6,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="green">#00FFA9</color>
     <color name="greyGreen">#aaFFFF</color>
+    <color name="state_black">#444444</color>
+    <color name="state_blue">#bbddff</color>
 </resources>

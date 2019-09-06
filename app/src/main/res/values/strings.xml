@@ -1,6 +1,38 @@
 <resources>
+    <string-array name="moods">
+        <item>@string/great</item>
+        <item>@string/awesome</item>
+        <item>@string/super1</item>
+        <item>@string/happy</item>
+        <item>@string/good</item>
+        <item>@string/fine</item>
+        <item>@string/dull</item>
+        <item>@string/ok</item>
+        <item>@string/sad</item>
+        <item>@string/tired</item>
+        <item>@string/frustrated</item>
+        <item>@string/angry</item>
+        <item>@string/stressed</item>
+        <item>@string/worried</item>
+        <item>@string/depressed</item>
+    </string-array>
     <string name="app_name">StateFull</string>
     <string name="open_drawer">Open Navigation Drawer</string>
     <string name="close_drawer">Close Navigation Drawer</string>
     <string name="about">We help you to log your mental and emotional states and provide insigt of your log. We use the state of the art machine learning techniques to detect mental problems and also try to predict the mood changes in days. You can also help us by sending those data to us and we can use that for research in psychology studies.</string>
+    <string name="depressed">Depressed</string>
+    <string name="worried">Worried</string>
+    <string name="stressed">Stressed</string>
+    <string name="angry">Angry</string>
+    <string name="frustrated">Frustrated</string>
+    <string name="tired">Tired</string>
+    <string name="sad">Sad</string>
+    <string name="ok">Ok</string>
+    <string name="dull">Dull</string>
+    <string name="fine">Fine</string>
+    <string name="happy">Happy</string>
+    <string name="good">Good</string>
+    <string name="super1">Super</string>
+    <string name="awesome">Awesome</string>
+    <string name="great">Great</string>
 </resources>

@@ -27,8 +27,6 @@ public class ReminderFragment extends Fragment implements onSwitchListener, onDe
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_reminder, container, false);
-
-
         RecyclerView rvReminders = view.findViewById(R.id.rvreminders);
         reminders = DatabaseManager.databaseManager.getReminders();
         adapter = new ReminderAdapter(reminders, this, this);
@@ -81,5 +79,4 @@ public class ReminderFragment extends Fragment implements onSwitchListener, onDe
         adapter.reminders = DatabaseManager.databaseManager.getReminders();
         adapter.notifyDataSetChanged();
     }
-
 }

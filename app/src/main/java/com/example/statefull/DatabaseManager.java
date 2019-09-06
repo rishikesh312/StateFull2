@@ -10,6 +10,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 public class DatabaseManager extends SQLiteOpenHelper {
 
@@ -36,6 +37,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String COLUMN_MERIDIAN = "meridian";
     private static final String COLUMN_ISACTIVE = "active";
 
+    private static final String HAPPINESS_TABLE = "Happy";
+    private static final String COLUMN_HTIME = "Time";
+    private static final String COLUMN_HVALUE = "Value";
+
+    private static final String MOOD_TABLE = "Emotions";
+    private static final String COLUMN_REGISTER_TIME = "Time";
+    private static final String COLUMN_MOODVALUE = "mood";
 
 
     static DatabaseManager databaseManager = null;
@@ -60,11 +68,18 @@ public class DatabaseManager extends SQLiteOpenHelper {
         String sql3 = String.format("CREATE TABLE %s(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s Text,  %s Text,  %s Integer);",
                 REMINDER_TABLE, COLUMN_REMINDER_TIME, COLUMN_MERIDIAN, COLUMN_ISACTIVE);
 
+        String sql4 = String.format("CREATE TABLE %s(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s Date, %s Integer);",
+                HAPPINESS_TABLE, COLUMN_HTIME, COLUMN_HVALUE);
+
+        String sql5 = String.format("CREATE TABLE %s(_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, %s LONG, %s Integer);)",
+                MOOD_TABLE, COLUMN_REGISTER_TIME, COLUMN_MOODVALUE);
+
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.execSQL(sql1);
         sqLiteDatabase.execSQL(sql2);
         sqLiteDatabase.execSQL(sql3);
-
+        sqLiteDatabase.execSQL(sql4);
+        sqLiteDatabase.execSQL(sql5);
     }
 
     @Override
@@ -74,6 +89,12 @@ public class DatabaseManager extends SQLiteOpenHelper {
         sql = String.format("DROP TABLE IF EXISTS %s;", TABLE_NAME2);
         sqLiteDatabase.execSQL(sql);
         sql = String.format("DROP TABLE IF EXISTS %s;", TABLE_NAME3);
+        sqLiteDatabase.execSQL(sql);
+        sql = String.format("DROP TABLE IF EXISTS %s;", REMINDER_TABLE);
+        sqLiteDatabase.execSQL(sql);
+        sql = String.format("DROP TABLE IF EXISTS %s;", HAPPINESS_TABLE);
+        sqLiteDatabase.execSQL(sql);
+        sql = String.format("DROP TABLE IF EXISTS %s;", MOOD_TABLE);
         sqLiteDatabase.execSQL(sql);
         onCreate(sqLiteDatabase);
     }
@@ -100,7 +121,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
         return false;
     }
-
 
     void loginSuccess(int userid) {
         ContentValues contentValues = new ContentValues();
@@ -227,4 +247,26 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
         return reminders;
     }
+
+    void moodEntry(long time, int val) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_REGISTER_TIME, time);
+        contentValues.put(COLUMN_MOODVALUE, val);
+        getWritableDatabase().insert(MOOD_TABLE, null, contentValues);
+    }
+
+    TreeMap<Long, Integer> getMoodEntries() {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + MOOD_TABLE, null);
+        TreeMap<Long, Integer> entries = new TreeMap<>();
+        if (cursor.moveToFirst()) {
+            do {
+                long t = Long.parseLong(cursor.getString(cursor.getColumnIndex(COLUMN_REGISTER_TIME)));
+                int v = Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_MOODVALUE)));
+                entries.put(t, v);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return entries;
+    }
+
 }
