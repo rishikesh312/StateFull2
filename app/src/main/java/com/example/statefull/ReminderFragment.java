@@ -53,9 +53,11 @@ public class ReminderFragment extends Fragment implements onSwitchListener, onDe
                                         hourOfDay = hourOfDay - 12;
                                         meridian = "Pm";
                                     }
+
                                     DatabaseManager.databaseManager.fabAddReminder(hourOfDay, minute, meridian);
                                     adapter.reminders = DatabaseManager.databaseManager.getReminders();
                                     adapter.notifyDataSetChanged();
+
                                 }
                             }, mHour, mMinute, false);
                     timePickerDialog.show();

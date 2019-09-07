@@ -28,9 +28,6 @@ public class MindActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.drawer_layout);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.drawable.state_logo);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

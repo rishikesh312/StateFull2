@@ -20,7 +20,7 @@ public class App extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel1 = new NotificationChannel(
                     CHANNEL_1_ID,
-                    "Register",
+                    "WhatsYourMood",
                     NotificationManager.IMPORTANCE_HIGH
             );
             NotificationChannel channel2 = new NotificationChannel(

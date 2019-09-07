@@ -3,7 +3,6 @@ package com.example.statefull;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.LimitLine;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -29,8 +27,8 @@ public class StateFragment extends Fragment implements MoodDialogFragment.MoodDi
 
     String choosen;
     Fragment fragment;
-    ArrayList<Entry> yValues = new ArrayList<>();
-    private LineChart lineChart;
+    ArrayList<BarEntry> yValues = new ArrayList<>();
+    private BarChart barChart;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
@@ -56,17 +54,33 @@ public class StateFragment extends Fragment implements MoodDialogFragment.MoodDi
     }
 
     private void initGraph(View view) {
-        lineChart = view.findViewById(R.id.line_chart);
-        lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(true);
-        lineChart.getAxisRight().setEnabled(false);
-        lineChart.getAxisLeft().setAxisMaximum(20);
-        lineChart.getAxisLeft().setAxisMinimum(0);
-        lineChart.getXAxis().setTextColor(-1);
-        lineChart.getAxisLeft().setTextColor(-1);
+        barChart = view.findViewById(R.id.mood_chart);
+        barChart.setDragEnabled(true);
+        barChart.setScaleEnabled(true);
+        barChart.getAxisRight().setEnabled(false);
+        barChart.getAxisLeft().setAxisMaximum(20);
+        barChart.getAxisLeft().setAxisMinimum(0);
+        barChart.getXAxis().setTextColor(Color.BLACK);
+        barChart.getAxisLeft().setTextColor(-1);
+        barChart.getAxisLeft().setTextColor(Color.BLACK);
 
-        LimitLine lowerlimit = new LimitLine(6f, "Negative");
 
+        LimitLine lowerlimit = new LimitLine(5f);
+        lowerlimit.setLineWidth(4);
+        lowerlimit.enableDashedLine(10f, 10f, 1f);
+        lowerlimit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        lowerlimit.setTextSize(15f);
+        lowerlimit.setLineColor(Color.RED);
+
+        LimitLine upperlimit = new LimitLine(15f);
+        upperlimit.setLineWidth(4);
+        upperlimit.enableDashedLine(10f, 10f, 1f);
+        upperlimit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+        upperlimit.setTextSize(15f);
+        upperlimit.setLineColor(Color.GREEN);
+
+        barChart.getAxisLeft().addLimitLine(lowerlimit);
+        barChart.getAxisLeft().addLimitLine(upperlimit);
         updateGraphs();
 
     }
@@ -96,25 +110,34 @@ public class StateFragment extends Fragment implements MoodDialogFragment.MoodDi
         long initial = 0;
         long diff = 0;
         yValues = new ArrayList<>();
+        int i = 0;
         for (long x : entries.keySet()) {
-            Log.d("X=", Long.toString(x));
+            /*Log.d("X=", Long.toString(x));
             if (initial == 0) {
                 initial = x;
             } else {
                 diff = (x - initial) / 1000;
                 diff /= 5;
-            }
+            }*/
             int val = entries.get(x);
-            yValues.add(new Entry(diff, val));
+            BarEntry barEntry = new BarEntry(i, val);
+            yValues.add(barEntry);
+            i++;
         }
-        LineDataSet dtset = new LineDataSet(yValues, "Moods");
-        dtset.setFillAlpha(0);
-        dtset.setColor(-16711767);
-        dtset.setLineWidth(2);
-        dtset.setValueTextColor(Color.WHITE);
-        ArrayList<ILineDataSet> datasets = new ArrayList<>();
-        datasets.add(dtset);
-        LineData data = new LineData(datasets);
-        lineChart.setData(data);
+        yValues.add(new BarEntry(i, 0));
+
+
+        BarDataSet dtset = new BarDataSet(yValues, "Moods");
+        dtset.setBarBorderWidth(1f);
+        dtset.setColor(Color.rgb(40, 0, 30));
+        dtset.setValueTextColor(Color.BLACK);
+        BarData data = new BarData(dtset);
+        barChart.setData(data);
+        barChart.getXAxis().setGranularity(3f);
+        barChart.setMaxVisibleValueCount(6);
+        barChart.getAxisLeft().setTextColor(Color.WHITE);
+        barChart.getXAxis().setTextColor(Color.WHITE);
+        barChart.canScrollHorizontally(BarChart.SCROLL_AXIS_HORIZONTAL);
+        barChart.animateXY(1000, 1000);
     }
 }

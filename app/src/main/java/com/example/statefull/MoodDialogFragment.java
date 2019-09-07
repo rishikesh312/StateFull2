@@ -32,7 +32,6 @@ public class MoodDialogFragment extends DialogFragment {
         final Context context = getContext();
         if (context != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
             builder.setTitle("Enter the current mood")
                     .setItems(R.array.moods, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
