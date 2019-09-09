@@ -8,7 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -267,6 +270,40 @@ public class DatabaseManager extends SQLiteOpenHelper {
             cursor.close();
         }
         return entries;
+    }
+
+    TreeMap<String, List<Integer>> getDailyAverage() {
+        Cursor cursor = getReadableDatabase().rawQuery("SELECT * FROM " + MOOD_TABLE, null);
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        TreeMap<String, List<Integer>> perDay = new TreeMap<String, List<Integer>>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        if (cursor.moveToFirst()) {
+            do {
+                long msecs = Long.parseLong(cursor.getString(cursor.getColumnIndex(COLUMN_REGISTER_TIME)));
+                int v = Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_MOODVALUE)));
+                date.setTime(msecs);
+                String datetime = formatter.format(date);
+                if (perDay.containsKey(datetime)) {
+                    perDay.get(datetime).add(v);
+                } else {
+                    perDay.put(datetime, new ArrayList<Integer>());
+                    perDay.get(datetime).add(v);
+                }
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        for (String key : perDay.keySet()) {
+            List<Integer> values = perDay.get(key);
+            int sum = 0;
+            for (int i = 0; i < values.size(); i++) {
+                sum += values.get(i);
+            }
+            int avg = sum / values.size();
+            values.clear();
+            values.add(avg);
+        }
+        return perDay;
     }
 
 }
