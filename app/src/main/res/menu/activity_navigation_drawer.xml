@@ -13,6 +13,11 @@
             android:icon="@drawable/ic_hormones_black_24dp"
             android:title="Levels" />
         <item
+            android:id="@+id/nav_achievement"
+            android:icon="@drawable/ic_reminder_24dp"
+            android:title="Achievement" />
+
+        <item
             android:id="@+id/nav_reminders"
             android:icon="@drawable/ic_reminder_24dp"
             android:title="Reminder" />

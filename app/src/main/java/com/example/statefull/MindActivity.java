@@ -100,6 +100,11 @@ public class MindActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
                 navigationView.setCheckedItem(R.id.nav_about);
                 break;
+            case R.id.nav_achievement:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AchievementFragment()).commit();
+                navigationView.setCheckedItem(R.id.nav_achievement);
+                break;
+
             case R.id.nav_send:
                 Toast.makeText(this, "Sending", Toast.LENGTH_SHORT);
                 break;
